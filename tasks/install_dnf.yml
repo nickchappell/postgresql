@@ -4,11 +4,14 @@
 # validate www.postgresql.org (or probably any other source).
 
   - block:
+      - name: PostgreSQL | Remove existing PostgreSQL module, streams and profiles | dnf
+        dnf:
+          name: '@postgresql'
+          state: absent
       - name: PostgrSQL | Install all the required dependencies | dnf
         dnf:
-          name: "ca-certificates, python-pycurl, glibc-common, libselinux-python, python*-psycopg2"
+          name: "ca-certificates, python3-pycurl, glibc-common, python3-libselinux, python*-psycopg2"
           state: present
-
       - name: PostgreSQL | Add yum Repository | dnf
         yum_repository:
           name: postgresql
@@ -17,7 +20,6 @@
           baseurl: "{{ postgresql_dnf_repository_baseurl }}"
           gpgkey: "{{ postgresql_dnf_repository_gpgkey }}"
         when: postgresql_install_repository
-
       - name: PostgreSQL | Install PostgreSQL | dnf
         dnf:
           name: "postgresql{{ postgresql_version_terse }}-server,postgresql{{ postgresql_version_terse }},postgresql{{ postgresql_version_terse }}-contrib"

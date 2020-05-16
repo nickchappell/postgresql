@@ -87,6 +87,22 @@ Vagrant.configure('2') do |config|
 
   end
 
+  config.vm.define 'centos8.local' do |machine|
+
+    machine.vm.box = "centos/8"
+    machine.vm.network :private_network, ip: '192.168.88.32'
+    machine.vm.hostname = 'centos8.local'
+
+    machine.vm.provision 'ansible' do |ansible|
+      ansible.playbook = 'tests/playbook.yml'
+      ansible.verbose = "vvv"
+      ansible.become = true
+      ansible.inventory_path = 'vagrant-inventory'
+      ansible.host_key_checking = false
+    end
+
+  end
+-
 ##
 ## Fedora is disabled, as the build fails
 ##
